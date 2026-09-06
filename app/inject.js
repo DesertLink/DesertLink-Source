@@ -30,7 +30,7 @@
   const st = document.createElement('style'); st.id='dl-style'; st.textContent=css; document.documentElement.appendChild(st);
 
   const panel = document.createElement('div'); panel.id='dl-panel'; panel.innerHTML=`
-    <div id="dl-head"><div id="dl-logo">Desert<b>Link</b></div><div class="dl-chip" id="dl-realm">PYWEL</div><div id="dl-sub">Companion 1.0.6</div><button class="dl-headbtn" id="dl-collapse" title="Hide panel">—</button></div>
+    <div id="dl-head"><div id="dl-logo">Desert<b>Link</b></div><div class="dl-chip" id="dl-realm">PYWEL</div><div id="dl-sub">Companion 1.0.7</div><button class="dl-headbtn" id="dl-collapse" title="Hide panel">—</button></div>
     <div id="dl-body">
       <div class="dl-row"><span class="dl-chip" id="dl-tel"><span class="dl-dot"></span><span>Telemetry</span></span><span class="dl-chip" id="dl-tp"><span class="dl-dot"></span><span>Teleport</span></span><span class="dl-chip" id="dl-build"><span class="dl-dot"></span><span>Build</span></span></div>
       <div id="dl-coords"><span class="dl-muted">X</span><span id="dl-x">—</span><span class="dl-muted">Y</span><span id="dl-y">—</span><span class="dl-muted">Z</span><span id="dl-z">—</span></div>

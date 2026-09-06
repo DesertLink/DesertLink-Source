@@ -1,0 +1,15 @@
+DESERTLINK v1.0.7
+
+This installer installs only the DesertLink desktop application.
+It does NOT modify Crimson Desert and does NOT install ASI plugins automatically.
+
+Before using teleport features, install these game-side requirements manually:
+
+1. A working ASI loader for Crimson Desert
+2. CrimsonDesertTelemetry.asi
+3. DesertLinkCore_v1.0.7.asi (included with the DesertLink release)
+
+Copy DesertLinkCore_v1.0.7.asi to the same ASI folder as CrimsonDesertTelemetry.asi.
+
+The installer performs no Internet downloads and uses no PowerShell.
+The Electron runtime is bundled into the installer at BUILD TIME from the official Electron release.

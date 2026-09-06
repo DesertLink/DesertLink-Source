@@ -1,50 +1,25 @@
-# Security Notes
+# DesertLink v1.0.7 Security / Distribution Notes
+
+## Public installer
+
+The public installer is built with standard Inno Setup.
+
+It:
+- installs only the DesertLink desktop application;
+- creates standard Desktop and Start Menu shortcuts;
+- does not modify the game;
+- does not install ASI files automatically;
+- performs no Internet downloads on the user's computer;
+- uses no PowerShell;
+- does not open or write to the Crimson Desert process.
+
+The official Electron runtime is fetched and SHA-256 verified only during the release build process and is then bundled into the installer.
 
 ## DesertLinkCore.asi
 
-DesertLinkCore is an in-process Crimson Desert ASI plugin.
+DesertLinkCore is loaded through the user's ASI loader and performs the game-side teleport integration in-process.
+It communicates with the desktop application over a local Windows named pipe.
 
-It uses runtime memory protection/allocation APIs because the teleport feature requires an in-process hook on supported game builds.
+Imported Win32 APIs are limited to KERNEL32 functions required for threading, local named-pipe IPC, memory protection/querying and the in-process teleport hook.
 
-Relevant Win32 APIs include:
-
-- CreateThread
-- VirtualAlloc
-- VirtualFree
-- VirtualProtect
-- VirtualQuery
-- FlushInstructionCache
-- CreateNamedPipeA
-- ConnectNamedPipe
-- ReadFile
-- WriteFile
-
-These APIs may resemble trainer/modding behavior to heuristic antivirus engines.
-
-DesertLinkCore does **not** use:
-- WinHTTP
-- WinINet
-- Winsock
-- remote sockets
-- OpenProcess
-- ReadProcessMemory
-- WriteProcessMemory
-- external process injection
-
-Communication with the DesertLink app is through the local named pipe:
-
-`\\.\pipe\DesertLinkCore-v1`
-
-## DesertLink App Setup
-
-The public app-only installer:
-- does not modify the game;
-- does not copy/install ASI files;
-- does not download anything;
-- does not use PowerShell;
-- creates local application files and Windows shortcuts;
-- verifies the manually downloaded Electron runtime by SHA-256.
-
-## Desktop app
-
-The desktop app requires normal Internet access to load the external web map/login service shown in the DesertLink UI. This network access is part of the map companion functionality, not an updater or arbitrary file downloader.
+It does not import WinHTTP, WinINet, Winsock, OpenProcess, ReadProcessMemory or WriteProcessMemory.

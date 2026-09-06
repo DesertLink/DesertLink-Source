@@ -1,4 +1,4 @@
-// DesertLinkCore.asi - Crimson Desert 2.01.x in-process teleport bridge
+// DesertLinkCore.asi - Crimson Desert 2.01.x in-process teleport bridge - v1.0.7
 // Clean architecture: no PowerShell, no OpenProcess, no WriteProcessMemory,
 // no external process injection. Loaded by the user's existing ASI loader.
 // IPC: local Windows named pipe \\.\pipe\DesertLinkCore-v1
@@ -445,7 +445,7 @@ static DWORD WINAPI CoreThread(LPVOID) {
         if(pipe==INVALID_HANDLE_VALUE){Sleep(1000);continue;}
         BOOL connected=ConnectNamedPipe(pipe,0);
         if(!connected && GetLastError()!=ERROR_PIPE_CONNECTED){CloseHandle(pipe);Sleep(250);continue;}
-        writeLine(pipe,"HELLO|1.0.6\n");
+        writeLine(pipe,"HELLO|1.0.7\n");
         sendStatus(pipe);
         char readbuf[1024]; char line[1024]; int ln=0;
         for(;;){
@@ -462,7 +462,7 @@ static DWORD WINAPI CoreThread(LPVOID) {
     return 0;
 }
 
-extern "C" __declspec(dllexport) int DesertLinkCoreVersion(){ return 106; }
+extern "C" __declspec(dllexport) int DesertLinkCoreVersion(){ return 107; }
 extern "C" BOOL WINAPI DllMain(void*, DWORD reason, void*) {
     if(reason==DLL_PROCESS_ATTACH) {
         HANDLE t=CreateThread(0,0,CoreThread,0,0,0);
