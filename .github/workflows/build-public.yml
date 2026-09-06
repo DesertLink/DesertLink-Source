@@ -1,0 +1,101 @@
+name: Build DesertLink Public Release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Prepare folders
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build\runtime | Out-Null
+          New-Item -ItemType Directory -Force dist | Out-Null
+
+      - name: Download and verify official Electron runtime
+        shell: pwsh
+        run: |
+          $url = 'https://github.com/electron/electron/releases/download/v44.2.0/electron-v44.2.0-win32-x64.zip'
+          $zip = "$env:RUNNER_TEMP\electron-v44.2.0-win32-x64.zip"
+          Invoke-WebRequest -Uri $url -OutFile $zip
+
+          $expected = '4021363e3090d67a144ebedb90765cf193b0e61f300c519c83f0174502a481da'
+          $actual = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+
+          if ($actual -ne $expected) {
+            throw "Electron SHA-256 mismatch: $actual"
+          }
+
+          Expand-Archive -LiteralPath $zip -DestinationPath build\runtime -Force
+
+          if (Test-Path build\runtime\resources\default_app.asar) {
+            Remove-Item build\runtime\resources\default_app.asar -Force
+          }
+
+          Rename-Item build\runtime\electron.exe DesertLink.exe -Force
+
+          New-Item -ItemType Directory -Force build\runtime\resources\app | Out-Null
+          Copy-Item app\* build\runtime\resources\app\ -Recurse -Force
+
+      - name: Download official Inno Setup compiler
+        shell: pwsh
+        run: |
+          $url = 'https://github.com/jrsoftware/issrc/releases/download/is-7_1_0/innosetup-7.1.0-x64.exe'
+          $installer = "$env:RUNNER_TEMP\innosetup-7.1.0-x64.exe"
+
+          Invoke-WebRequest -Uri $url -OutFile $installer
+
+          Start-Process -FilePath $installer `
+            -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/DIR=C:\InnoSetup' `
+            -Wait
+
+          if (-not (Test-Path 'C:\InnoSetup\ISCC.exe')) {
+            throw 'ISCC.exe not found after Inno Setup installation.'
+          }
+
+      - name: Build standard installer
+        shell: pwsh
+        run: |
+          & 'C:\InnoSetup\ISCC.exe' 'installer\DesertLink.iss'
+
+          if ($LASTEXITCODE -ne 0) {
+            throw "Inno Setup failed with exit code $LASTEXITCODE"
+          }
+
+      - name: Prepare Nexus release ZIP
+        shell: pwsh
+        run: |
+          Copy-Item core\DesertLinkCore_v1.0.7.asi dist\DesertLinkCore_v1.0.7.asi -Force
+          Copy-Item PUBLIC_README.txt dist\README.txt -Force
+
+          $files = @(
+            'dist\DesertLink_Setup_v1.0.7.exe',
+            'dist\DesertLinkCore_v1.0.7.asi',
+            'dist\README.txt'
+          )
+
+          Compress-Archive `
+            -Path $files `
+            -DestinationPath 'dist\DesertLink_v1.0.7_NEXUS.zip' `
+            -Force
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: DesertLink-v1.0.7-public
+          path: |
+            dist/DesertLink_Setup_v1.0.7.exe
+            dist/DesertLinkCore_v1.0.7.asi
+            dist/DesertLink_v1.0.7_NEXUS.zip
+            dist/README.txt
