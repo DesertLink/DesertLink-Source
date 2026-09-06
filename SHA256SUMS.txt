@@ -1,0 +1,11 @@
+# DesertLink v1.0.6 release hashes
+
+DesertLink_App_Setup_v1.0.6_PUBLIC.exe
+SHA-256: 5c73a28a69eeeda1852075aba11419876cfba64d0ec777c4515e2ff7658bd2c7
+
+DesertLinkCore_v1.0.6.asi
+SHA-256: 41e94e45fe314fdf61d92fd4dbe6a357529c6e819fc0c7a91d1b67f815c6be1c
+
+Official Electron runtime expected by Setup:
+electron-v44.2.0-win32-x64.zip
+SHA-256: 4021363e3090d67a144ebedb90765cf193b0e61f300c519c83f0174502a481da

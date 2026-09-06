@@ -1,0 +1,12 @@
+DesertLink external dependency:
+
+CrimsonDesertTelemetry
+Copyright (c) 2026 CrimsonDesertTelemetry contributors
+Licensed under the MIT License.
+DesertLink consumes its documented localhost API and requires it at runtime; DesertLink does not redistribute its binaries.
+
+Electron runtime
+Installed once from the official Electron v44.2.0 Windows x64 release into the user's LocalAppData DesertLink Required Files folder. DesertLink normal startup does not download Electron. Electron's own LICENSE and LICENSES.chromium.html remain with the runtime.
+
+MapGenie
+External map website loaded by the embedded browser. No MapGenie assets are redistributed in this package.

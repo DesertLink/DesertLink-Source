@@ -1,0 +1,46 @@
+Subject: Quarantined Crimson Desert mod review request - DesertLink v1.0.6
+
+Hello Nexus Mods Support,
+
+My Crimson Desert mod, DesertLink, has been quarantined by the automated safety checks and I would like to request a manual review.
+
+Mod page:
+[PASTE YOUR NEXUS MOD PAGE LINK HERE]
+
+Source code:
+[PASTE YOUR GITHUB DESERTLINK REPOSITORY LINK HERE]
+
+Project: DesertLink - Crimson Desert Map Companion
+Version: 1.0.6
+
+The release contains two compiled Windows components:
+
+1. DesertLink_App_Setup_v1.0.6_PUBLIC.exe
+   - Installs only the DesertLink desktop application.
+   - Creates Desktop and Start Menu shortcuts.
+   - Does not install or modify ASI files.
+   - Performs no Internet downloads.
+   - Does not use PowerShell.
+   - For first-time setup, the user manually downloads the official Electron runtime and Setup verifies its SHA-256 before installation.
+
+2. DesertLinkCore_v1.0.6.asi
+   - Loaded normally through the user's ASI loader.
+   - Provides the in-process teleport integration.
+   - Communicates with the DesertLink desktop app through a local Windows named pipe.
+   - Does not use remote networking, OpenProcess, ReadProcessMemory, WriteProcessMemory, or external process injection.
+
+The desktop DesertLink application itself loads the web map/login service used by the companion interface, so normal web access is part of the map functionality. The installer does not download files.
+
+Release SHA-256 hashes:
+
+DesertLink_App_Setup_v1.0.6_PUBLIC.exe
+5c73a28a69eeeda1852075aba11419876cfba64d0ec777c4515e2ff7658bd2c7
+
+DesertLinkCore_v1.0.6.asi
+41e94e45fe314fdf61d92fd4dbe6a357529c6e819fc0c7a91d1b67f815c6be1c
+
+The GitHub repository contains the complete application source, DesertLinkCore source, installer source, build instructions, security notes, and release hashes.
+
+Could you please review and unblock the quarantined file when possible?
+
+Thank you.
