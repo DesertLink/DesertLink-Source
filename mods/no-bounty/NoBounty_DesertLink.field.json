@@ -1,10 +1,10 @@
 {
   "modinfo": {
     "author": "DesertLink",
-    "description": "Never Wanted - prevents bounty escalation from assault and theft crime paths.",
-    "note": "TEST build for Crimson Desert 2.01.00 / EXE 1.0.0.2760",
+    "description": "Never Wanted test build. Prevents wanted bounty price from increasing.",
+    "note": "Crimson Desert 2.01.00 / EXE 1.0.0.2760. DMM-compatible field name.",
     "title": "Never Wanted - DesertLink",
-    "version": "0.2-test"
+    "version": "0.2.1-test"
   },
   "format": 3,
   "format_minor": 1,
@@ -16,18 +16,7 @@
         {
           "op": "set",
           "match": {},
-          "field": "_increasePrice",
-          "new": 0
-        }
-      ]
-    },
-    {
-      "file": "tribeinfo.pabgb",
-      "intents": [
-        {
-          "op": "set",
-          "match": {},
-          "field": "_wantedCrimeType",
+          "field": "increase_price",
           "new": 0
         }
       ]
