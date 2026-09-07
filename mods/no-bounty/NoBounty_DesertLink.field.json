@@ -1,0 +1,11 @@
+{
+  "format": 3,
+  "target": "wantedinfo.pabgb",
+  "intents": [
+    {
+      "match": {},
+      "field": "increase_price",
+      "new": 0
+    }
+  ]
+}
