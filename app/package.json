@@ -1,6 +1,6 @@
 {
   "name": "desertlink-companion",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Crimson Desert live-map companion using CrimsonDesertTelemetry and DesertLinkCore local IPC",
   "main": "main.js",
   "private": true
