@@ -1,0 +1,40 @@
+name: Apply DesertLink v1.2 Source Update
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply v1.2 source tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar -xzf .source-update.tar.gz -C .
+
+          rm -f .github/workflows/build-no-bounty.yml
+          rm -f README_GITHUB_BUILD.txt
+          rm -f docs/DESERTLINK_PROJECT_STATE.md
+          rm -f docs/EMAIL_TO_NEXUS.txt
+          rm -f core/DesertLinkCore_v1.0.7.asi
+          rm -f installer/DesertLinkSetup.cpp
+          rm -f installer/chkstk.s
+          rm -rf mods/no-bounty
+
+          rm -f .source-update.tar.gz
+          rm -f .github/workflows/sync-v12.yml
+
+          git config user.name 'DesertLink Build Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m 'Update Map Companion source to v1.2' || exit 0
+          git push
