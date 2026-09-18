@@ -29,8 +29,12 @@ jobs:
 
           tar -xzf "$RUNNER_TEMP/desertlink-v12.tar.gz" -C .
 
+          # Workflow files are finalized separately through the repository API.
+          # Keep the checked-in workflow set unchanged in this commit so the
+          # Actions token only pushes normal source/documentation changes.
+          git checkout HEAD -- .github/workflows
+
           rm -f .source-update.tar.gz .source-update.part*
-          rm -f .github/workflows/build-no-bounty.yml
           rm -f README_GITHUB_BUILD.txt
           rm -f docs/DESERTLINK_PROJECT_STATE.md
           rm -f docs/EMAIL_TO_NEXUS.txt
@@ -38,7 +42,6 @@ jobs:
           rm -f installer/DesertLinkSetup.cpp
           rm -f installer/chkstk.s
           rm -rf mods/no-bounty
-          rm -f .github/workflows/sync-v12.yml
 
           git config user.name 'DesertLink Build Bot'
           git config user.email 'actions@users.noreply.github.com'
