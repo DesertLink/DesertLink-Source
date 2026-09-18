@@ -1,11 +1,17 @@
-# DesertLink v1.0.6 release hashes
+# DesertLink Map Companion v1.2 published release hashes
 
-DesertLink_App_Setup_v1.0.6_PUBLIC.exe
-SHA-256: 5c73a28a69eeeda1852075aba11419876cfba64d0ec777c4515e2ff7658bd2c7
+MapCompanion_v1.2_2.02.zip
+SHA-256: 9c028ebedb7faf26410e482f0cb3cbaaf253069794a6bea2105f2a3b64aa37d3
 
-DesertLinkCore_v1.0.6.asi
-SHA-256: 41e94e45fe314fdf61d92fd4dbe6a357529c6e819fc0c7a91d1b67f815c6be1c
+DesertLink_Setup_v1.2.exe
+SHA-256: a3bead2dc002f56de142cc8d2c197f02685f13da950bf5055c4943bfcb2d5917
 
-Official Electron runtime expected by Setup:
+DesertLinkCore.asi
+SHA-256: 380a997b7806d812feb681ee0a3727899c721f28505ab5c3eb0a5d07f8ec7f4f
+
+README.txt
+SHA-256: b34e6856f75224dce7ec6f5d37bacd1d3acac18deaa14b073105b32f54cad5d2
+
+Official Electron runtime used by the build workflow:
 electron-v44.2.0-win32-x64.zip
 SHA-256: 4021363e3090d67a144ebedb90765cf193b0e61f300c519c83f0174502a481da

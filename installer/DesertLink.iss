@@ -1,5 +1,5 @@
 #define MyAppName "DesertLink"
-#define MyAppVersion "1.0.7"
+#define MyAppVersion "1.2"
 #define MyAppPublisher "DesertLink"
 #define MyAppExeName "DesertLink.exe"
 
@@ -13,7 +13,7 @@ DefaultGroupName=DesertLink
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 OutputDir=..\dist
-OutputBaseFilename=DesertLink_Setup_v1.0.7
+OutputBaseFilename=DesertLink_Setup_v1.2
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -26,8 +26,6 @@ SetupLogging=yes
 InfoBeforeFile=INFO_BEFORE.txt
 
 [Files]
-; build\runtime is the official Electron Windows x64 runtime, prepared at build time.
-; It already contains resources\app with DesertLink's JavaScript application files.
 Source: "..\build\runtime\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
@@ -39,9 +37,3 @@ Filename: "{app}\{#MyAppExeName}"; Description: "Launch DesertLink"; Flags: nowa
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
-
-[Code]
-function InitializeSetup(): Boolean;
-begin
-  Result := True;
-end;

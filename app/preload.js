@@ -1,26 +1,19 @@
 'use strict';
+
 const { contextBridge, ipcRenderer } = require('electron');
+
+function subscribe(channel, cb, transform = value => value) {
+  if (typeof cb !== 'function') return () => {};
+  const listener = (_event, value) => cb(transform(value));
+  ipcRenderer.on(channel, listener);
+  return () => ipcRenderer.removeListener(channel, listener);
+}
 
 contextBridge.exposeInMainWorld('desertLink', {
   command: (cmd, payload = {}) => ipcRenderer.invoke('dl-command', { cmd, ...payload }),
   getState: () => ipcRenderer.invoke('dl-get-state'),
   getWaypoints: () => ipcRenderer.invoke('dl-get-waypoints'),
-  onState: (cb) => {
-    if (typeof cb !== 'function') return () => {};
-    const fn = (_event, state) => cb(state);
-    ipcRenderer.on('dl-state', fn);
-    return () => ipcRenderer.removeListener('dl-state', fn);
-  },
-  onWaypoints: (cb) => {
-    if (typeof cb !== 'function') return () => {};
-    const fn = (_event, data) => cb(data);
-    ipcRenderer.on('dl-waypoints', fn);
-    return () => ipcRenderer.removeListener('dl-waypoints', fn);
-  },
-  onPanelToggle: (cb) => {
-    if (typeof cb !== 'function') return () => {};
-    const fn = () => cb();
-    ipcRenderer.on('dl-panel-toggle', fn);
-    return () => ipcRenderer.removeListener('dl-panel-toggle', fn);
-  }
+  onState: cb => subscribe('dl-state', cb),
+  onWaypoints: cb => subscribe('dl-waypoints', cb),
+  onAction: cb => subscribe('dl-action', cb)
 });

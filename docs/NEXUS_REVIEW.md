@@ -1,29 +1,30 @@
 # Nexus Mods Review Notes
 
-Project: DesertLink - Crimson Desert Map Companion
-Version: 1.0.6
+Project: DesertLink – Crimson Desert Map Companion  
+Version: 1.2
 
-## Why the upload may trigger automated review
+## Release components
 
-The release contains compiled Windows code:
+The public package contains:
 
-1. `DesertLink_App_Setup_v1.0.6_PUBLIC.exe`
-2. `DesertLinkCore_v1.0.6.asi`
+1. `DesertLink_Setup_v1.2.exe`
+2. `DesertLinkCore.asi`
+3. `README.txt`
 
-`DesertLinkCore.asi` is a game modification plugin and performs an in-process runtime hook required for teleport functionality. This may resemble trainer behavior to heuristic scanners.
+The installer is a standard Inno Setup package. It installs only the Electron desktop companion and creates normal Windows shortcuts.
 
-The desktop installer does not download files and does not perform game-memory operations.
+`DesertLinkCore.asi` is loaded through the user's ASI loader and provides the in-process teleport bridge. It communicates with the desktop companion over a local Windows named pipe.
 
 ## Architecture
 
 ```text
 CrimsonDesertTelemetry.asi
         |
-        | live telemetry
+        | local live telemetry
         v
-DesertLink desktop app
+DesertLink desktop companion
         |
-        | local named pipe IPC
+        | local named-pipe IPC
         v
 DesertLinkCore.asi
         |
@@ -32,25 +33,27 @@ DesertLinkCore.asi
 Crimson Desert
 ```
 
-## Internet use
+## Network behavior
 
-- DesertLinkCore: local IPC only, no remote networking.
-- Installer: no downloads / no Internet communication.
-- Desktop app: web access is used to load the map/login service that is part of the companion UI.
+- `DesertLinkCore.asi`: no remote networking.
+- Installer: no runtime downloads.
+- Desktop companion: web access is used for the MapGenie map/login service.
 
-## Release hashes
+## Build compatibility
 
-Setup:
-`5c73a28a69eeeda1852075aba11419876cfba64d0ec777c4515e2ff7658bd2c7`
+Current target:
 
-Core ASI:
-`41e94e45fe314fdf61d92fd4dbe6a357529c6e819fc0c7a91d1b67f815c6be1c`
+- Crimson Desert 2.02.00
+- `CrimsonDesert.exe` 1.0.0.2850
+- Steam build 25246367
+
+The game-side component fails closed when its executable checks do not match.
 
 ## Source/build documentation
 
-- `core/DesertLinkCore.cpp`
-- `installer/DesertLinkSetup.cpp`
 - `app/`
+- `core/DesertLinkCore.cpp`
+- `installer/DesertLink.iss`
 - `BUILD.md`
 - `SECURITY.md`
 - `SHA256SUMS.txt`

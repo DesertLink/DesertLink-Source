@@ -1,25 +1,33 @@
-# DesertLink v1.0.7 Security / Distribution Notes
+# DesertLink v1.2 Security / Distribution Notes
 
 ## Public installer
 
 The public installer is built with standard Inno Setup.
 
 It:
+
 - installs only the DesertLink desktop application;
 - creates standard Desktop and Start Menu shortcuts;
-- does not modify the game;
+- does not modify Crimson Desert;
 - does not install ASI files automatically;
-- performs no Internet downloads on the user's computer;
+- performs no runtime downloads;
 - uses no PowerShell;
 - does not open or write to the Crimson Desert process.
 
-The official Electron runtime is fetched and SHA-256 verified only during the release build process and is then bundled into the installer.
+The official Electron runtime is fetched and SHA-256 verified during the release build and is then bundled into the installer.
 
 ## DesertLinkCore.asi
 
-DesertLinkCore is loaded through the user's ASI loader and performs the game-side teleport integration in-process.
-It communicates with the desktop application over a local Windows named pipe.
+DesertLinkCore is loaded in-process through the user's existing ASI loader and provides teleport integration for the supported Crimson Desert build.
 
-Imported Win32 APIs are limited to KERNEL32 functions required for threading, local named-pipe IPC, memory protection/querying and the in-process teleport hook.
+The desktop companion communicates with DesertLinkCore through the local named pipe:
 
-It does not import WinHTTP, WinINet, Winsock, OpenProcess, ReadProcessMemory or WriteProcessMemory.
+`\\.\pipe\DesertLinkCore-v1`
+
+The plugin does not use external process-memory APIs. It validates the supported executable build before installing the teleport integration and fails closed when the target does not match.
+
+## Desktop network access
+
+The desktop companion reads Crimson Desert telemetry from the local telemetry service and loads the MapGenie web map/login service used by the interface.
+
+The installer does not download executable payloads at runtime.
