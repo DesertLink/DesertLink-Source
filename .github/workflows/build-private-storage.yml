@@ -17,18 +17,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Configure MSVC x64
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
       - name: Configure
-        shell: pwsh
+        shell: cmd
         run: |
-          cmake -S "mods/CrimsonDesert/PrivateStorageStandalone" `
-                -B "mods/CrimsonDesert/PrivateStorageStandalone/build" `
-                -G "Visual Studio 17 2022" -A x64
+          cmake -S "mods/CrimsonDesert/PrivateStorageStandalone" -B "mods/CrimsonDesert/PrivateStorageStandalone/build" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release
+          if errorlevel 1 exit /b 1
 
       - name: Build Release
-        shell: pwsh
+        shell: cmd
         run: |
-          cmake --build "mods/CrimsonDesert/PrivateStorageStandalone/build" `
-                      --config Release
+          cmake --build "mods/CrimsonDesert/PrivateStorageStandalone/build"
+          if errorlevel 1 exit /b 1
 
       - name: Stage
         shell: pwsh
