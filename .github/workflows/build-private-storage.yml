@@ -1,0 +1,48 @@
+name: Build DesertLink Private Storage
+
+on:
+  push:
+    branches:
+      - feature/private-storage-standalone
+    paths:
+      - "mods/CrimsonDesert/PrivateStorageStandalone/**"
+      - ".github/workflows/build-private-storage.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        shell: pwsh
+        run: |
+          cmake -S "mods/CrimsonDesert/PrivateStorageStandalone" `
+                -B "mods/CrimsonDesert/PrivateStorageStandalone/build" `
+                -G "Visual Studio 17 2022" -A x64
+
+      - name: Build Release
+        shell: pwsh
+        run: |
+          cmake --build "mods/CrimsonDesert/PrivateStorageStandalone/build" `
+                      --config Release
+
+      - name: Stage
+        shell: pwsh
+        run: |
+          $out = "mods/CrimsonDesert/PrivateStorageStandalone/dist"
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/build/Release/DesertLinkPrivateStorage.asi" "$out/DesertLinkPrivateStorage.asi"
+          Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/README.md" "$out/README.md"
+          Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/UPSTREAM_PRIVATE_STORAGE_MASTER_LICENSE.txt" "$out/UPSTREAM_PRIVATE_STORAGE_MASTER_LICENSE.txt"
+          Get-FileHash "$out/DesertLinkPrivateStorage.asi" -Algorithm SHA256 | Format-List | Out-File "$out/SHA256.txt"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DesertLinkPrivateStorage
+          path: mods/CrimsonDesert/PrivateStorageStandalone/dist/
+          if-no-files-found: error
