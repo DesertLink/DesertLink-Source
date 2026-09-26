@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <cwchar>
 
 namespace dlps
 {
@@ -1110,8 +1111,8 @@ namespace dlps
     {
         wchar_t cls[128]{};
         if (!GetClassNameW(hwnd, cls, 128)) return false;
-        return std::wcscmp(cls, L"Root") == 0 ||
-               std::wcscmp(cls, L"WindowsLauncherClassName") == 0;
+        return ::wcscmp(cls, L"Root") == 0 ||
+               ::wcscmp(cls, L"WindowsLauncherClassName") == 0;
     }
 
     static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
@@ -1221,9 +1222,9 @@ namespace dlps
 
         wchar_t path[MAX_PATH]{};
         GetModuleFileNameW(g_self, path, MAX_PATH);
-        wchar_t* slash = std::wcsrchr(path, L'\\');
+        wchar_t* slash = ::wcsrchr(path, L'\\');
         if (slash) *(slash + 1) = 0;
-        std::wcscat_s(path, L"DesertLinkPrivateStorage.log");
+        ::wcscat_s(path, L"DesertLinkPrivateStorage.log");
         _wfopen_s(&g_log, path, L"w");
     }
 
