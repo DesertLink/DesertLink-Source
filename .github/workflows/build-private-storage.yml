@@ -39,7 +39,7 @@ jobs:
         run: |
           $out = "mods/CrimsonDesert/PrivateStorageStandalone/dist"
           New-Item -ItemType Directory -Force -Path $out | Out-Null
-          Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/build/Release/DesertLinkPrivateStorage.asi" "$out/DesertLinkPrivateStorage.asi"
+          Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/build/DesertLinkPrivateStorage.asi" "$out/DesertLinkPrivateStorage.asi"
           Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/README.md" "$out/README.md"
           Copy-Item "mods/CrimsonDesert/PrivateStorageStandalone/UPSTREAM_PRIVATE_STORAGE_MASTER_LICENSE.txt" "$out/UPSTREAM_PRIVATE_STORAGE_MASTER_LICENSE.txt"
           Get-FileHash "$out/DesertLinkPrivateStorage.asi" -Algorithm SHA256 | Format-List | Out-File "$out/SHA256.txt"
