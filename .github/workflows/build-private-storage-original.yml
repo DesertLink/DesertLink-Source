@@ -1,0 +1,50 @@
+name: Build Original Private Storage
+
+on:
+  push:
+    branches:
+      - feature/private-storage-original
+    paths:
+      - "mods/CrimsonDesert/PrivateStorageOriginal/**"
+      - ".github/workflows/build-private-storage-original.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure MSVC x64
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build
+        shell: cmd
+        run: |
+          if not exist "mods\CrimsonDesert\PrivateStorageOriginal\dist" mkdir "mods\CrimsonDesert\PrivateStorageOriginal\dist"
+          cl /nologo /std:c++17 /O2 /MT /EHsc /W3 /utf-8 ^
+            /LD "mods\CrimsonDesert\PrivateStorageOriginal\src\DesertLinkPrivateStorage.cpp" ^
+            /link /OUT:"mods\CrimsonDesert\PrivateStorageOriginal\dist\DesertLinkPrivateStorage.asi" ^
+            user32.lib version.lib
+          if errorlevel 1 exit /b 1
+
+      - name: Hash
+        shell: pwsh
+        run: |
+          Get-FileHash "mods/CrimsonDesert/PrivateStorageOriginal/dist/DesertLinkPrivateStorage.asi" -Algorithm SHA256 |
+            Format-List | Out-File "mods/CrimsonDesert/PrivateStorageOriginal/dist/SHA256.txt"
+          Copy-Item "mods/CrimsonDesert/PrivateStorageOriginal/README.md" "mods/CrimsonDesert/PrivateStorageOriginal/dist/README.md"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DesertLinkPrivateStorage-Original
+          path: mods/CrimsonDesert/PrivateStorageOriginal/dist/
+          if-no-files-found: error
